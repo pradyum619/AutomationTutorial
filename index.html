@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Automation Pipeline</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="css.css">
+    </head>
+    <body>
+        <button class="collapsible">Introduction</button>
+        <div class="content">
+          <h4>DevOps Tutorial: Automating Web Application using Jenkins, Docker and GitHub.
+            </h4>
+            <p>We have two environments Prdouction Server and Testing Server created using docker technology on RHEL8 .</p><br><br>
+            <p>If you are already a part of Devops Assembly lines training under Vimal Daga Sir then you will catch the flow. ;) </p> <br><br>
+
+            <p>Go through the steps </p>
+        </div>
+        
+        <button class="collapsible">Setting UP Server System</button>
+        <div class="content">
+            <h4>Run following on RHEL8</h4>
+            <h4>Create two directories</h4>
+            <code>mkdir /prodDir/</code><br>
+            <code>mkdir /testDir/</code><br>
+
+           <h4>For testing purpose, stop the firewall and selinux:</h4>
+           <code>systemctl stop firewalld</code><br>
+           <code>setenforce 0</code><br>
+
+           <h4>Start Docker and Jenkins</h4>
+           <code>systemctl start docker</code><br>
+           <code>systemctl start jenkins</code><br><br>
+        </div>
+        
+
+        <button class="collapsible">Setting up Github</button>
+        <div class="content">
+           <h4>create a new repository on github</h4>
+           <p><b>login to github</b></p><br>
+           <p><b>create new repo</b></p>
+           <img src="images/github_repo_1.png" width="1300px" height="700px" alt="new repo git"><br><br>
+           <p><b>don't forget to check README Intitialize</b></p>
+           <img src="images/github_repo_2.png" width="1300px" height="700px" alt="new repo git"><br>
+          
+
+        </div>
+
+        <button class="collapsible">Setting up developer system</button>
+        <div class="content">
+        
+           <h4>goto developer system and clone the repo locally</h4>
+          <img src="images/git_clone.png" alt="git clone"><br>
+
+           <h4>Edit the post commit file</h4>
+           <p>Located in .git directory inside your cloned repo</p>
+           <img src="images/git_post_commit.png" alt="git post-commit"><br>
+           <b>CODE:</b>
+           <code>#! /bin/bash/</code><br>
+           <code>git push</code>
+           
+           <h4>create some code files and commit to master branch</h4>
+            <h4>create a new branch</h4>
+           <code>git branch dev1</code><br><br>
+           <h4>If you want you can do some merge and rebase for practice</h4>
+        </div>
+        
+        <button class="collapsible">Setting up Jenkins</button>
+        <div class="content">
+          <h3>**********THIS is Where Magic happens*********</h3>
+            <h4>***Install the github plugin in jenkins***</h4>
+            <img src="images/git_plugin.png" width="1300px" height="700px" alt="git plugin"><br>
+            <p>Check the restart jenkins option while installing</p>
+           <h4>***There are three Jobs to create:***</h4>
+           
+           <p><b>HW1:</b></p>
+           <p>Configure as Follows:</p>
+           <img src="images/hw1_scm.png" width="1300px" height="700px" alt="git hw1 one"><br>
+           <p>Insert the repo link inside the scm option</p>
+           <p>choose branch master</p>
+           <h4>Build triggers : use polling in every minute (although we can use hooks which is better option but for now am going with polling)</h4>
+           <img src="images/hw1_poll.png" width="1300px" height="700px" alt="git hw1 two"><br><br>
+           <h4><p>Execute shell: Paste the following code</p></h4>
+           <code>if sudo docker ps | grep prod_server</code><br>
+           <code>then</code><br>
+           <code>echo "Prod server already running"</code><br>
+           <code>else</code><br>
+           <code> sudo docker run -d -t -i -p 8081:80 -v /prodDir:/usr/local/apache2/htdocs/ --name prod_server httpd</code><br>
+           <code>fi</code><br>
+           <code>sudo cp -r -v -f * /prodDir/</code><br>
+           <img src="images/hw1_shell.png" width="1300px" height="700px" alt="git hw1 two"><br><br>
+
+           <h4>Click apply and then save</h4>   
+        </div>
+        
+        <button class="collapsible">HW2 Job</button>
+        <div class="content">
+          
+           <p><b>HW2:</b></p>
+           <p>Configure as Follows:</p>
+           <img src="images/hw2_scm.png" width="1300px" height="700px" alt="git hw2 one"><br>
+           <p>Insert the repo link inside the scm option</p>
+           <p>choose branch dev1</p>
+           <h4>Build triggers : use polling in every minute (although we can use hooks which is better option but for now am going with polling)</h4>
+           <img src="images/hw1_poll.png" width="1300px" height="700px" alt="git hw1 two"><br><br>
+           <h4><p>Execute shell: Paste the following code</p></h4>
+           <code>if sudo docker ps | grep test_server</code><br>
+           <code>then</code><br>
+           <code>echo "Test server already running"</code><br>
+           <code>else</code><br>
+           <code> sudo docker run -d -t -i -p 8082:80 -v /testDir:/usr/local/apache2/htdocs/ --name test_server httpd</code><br>
+           <code>fi</code><br>
+           <code>sudo cp -r -v -f * /testDir/</code><br>
+           <img src="images/hw2_shell.png" width="1300px" height="700px" alt="git hw1 two"><br><br>
+
+           <h4>Click apply and then save</h4>   
+        </div>
+        
+        <button class="collapsible">HW3 Job 3</button>
+        <div class="content">
+          
+           <p><b>HW3:</b></p>
+           <p>Configure as Follows:</p>
+           <img src="images/hw3_scm.png" width="1300px" height="700px" alt="git hw3 one"><br>
+           <p>Insert the repo link inside the scm option</p>
+           <p>choose branch dev1</p>
+           <h4>Build triggers : No need to add this trigger , as testing team will run this job but assuming that all tests are good so we trigger this job just after HW2</h4>
+           <img src="images/hw3_trig.png" width="1300px" height="700px" alt="git hw3 two"><br><br>
+           <h4>***ADD this in POST BUILD***</h4>
+           <img src="images/hw3_post.png" width="1300px" height="700px" alt="git hw3 three"><br><br>
+
+           <h4>Click apply and then save</h4>   
+        </div>
+        
+        <button class="collapsible">Conclusion</button>
+        <div class="content">
+          <h4>Now Everything is configured. As soon as the dev1 branch is commit by developper locally, it getss push on github,</h4><br>
+          <h4>Then our HW2 Job gets code from branch dev1 and deploy to test server</h4><br>
+          <h4>Finally our HW3 merges the branches by using credentials provided and production deployed.</h4>
+        </div>
+        
+        
+        
+        
+        <script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } 
+  });
+}
+</script>
+    </body>
+</html>
