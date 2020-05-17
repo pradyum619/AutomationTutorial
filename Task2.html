@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Automation Pipeline</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="css.css">
+    </head>
+    <body>
+        <button class="collapsible">Introduction</button>
+        <div class="content">
+          <h4>DevOps Tutorial: Automating Web Application using Jenkins, Docker and GitHub.
+            </h4>
+            <img src="images/intro2.png" alt="intro"><br><br>
+            <p>Read Task 1 as It will help you to understand things in better manner.</p><br><br>
+            <p>If you are already a part of Devops Assembly lines training under Vimal Daga Sir then you will catch the flow. ;) </p> <br><br>
+
+            <p>Go through the steps </p><br><br>
+        </div>
+        
+        <button class="collapsible">Creating container Image that has jenkins installed using DockerFile</button>
+        <div class="content">
+            <img src="images/dockerfile.png" alt="dockerfile"><br><br>
+            <h4>run following command inside same folder where DOckerfile exist</h4>
+            <code>docker build -t myjenkins:v1 .</code><br>
+            
+
+           <h4>When we launch the container using our image jenkins will start</h4><br>
+           <img src="images/jenkinslaunch.png" alt="dockerfile"><br><br>
+        </div>
+        
+
+        <button class="collapsible">Create a Job chain as follows</button>
+        <div class="content">
+           <h4>JOB 1</h4>
+           <p>Pull  the Github repo automatically when some developers push repo to Github.</p><br>
+           
+          <h4>JOB 2</h4>
+           <p>By looking at the code or program file, Jenkins should automatically start the respective language interpreter install image container to deploy code ( eg. If code is of  PHP, then Jenkins should start the container that has PHP already installed )</p><br>
+           
+           
+           <h4>JOB 3</h4>
+           <p>Test your app if it  is working or not.</p><br>
+           
+           <h4>JOB 4</h4>
+           <p>if app is not working , then send email to developer with error messages.</p><br>
+           
+           <img src="images/pipeline.png" alt="Pipeline">
+
+           <h5>Create One extra job job5 for monitor : If container where app is running. fails due to any reson then this job should automatically start the container again.</h5>
+
+
+
+        </div>
+
+        <button class="collapsible">JOB 1</button>
+        <div class="content">
+           <h4>JOB 1</h4>
+           <p>Pull  the Github repo automatically when some developers push repo to Github.</p><br>
+           <p><b>create new repo</b></p>
+          <img src="images/hw1_scm.png" width="590px" height="360px" alt="job1 scm"><br><br>
+          <img src="images/job1trigger.png"  alt="job1 trigger">
+           
+        </div>
+        
+        <button class="collapsible">JOB 2</button>
+        <div class="content">
+           <h4>JOB 2</h4>
+           <p>By looking at the code or program file, Jenkins should automatically start the respective language interpreter install image container to deploy code ( eg. If code is of  PHP, then Jenkins should start the container that has PHP already installed )</p><br>
+           <img src="images/job2_one.png"alt="job2"><br>
+        </div>
+        
+        <button class="collapsible">JOB 3</button>
+        <div class="content">
+          <h4>JOB 3</h4>
+           <p>Test your app if it  is working or not.</p><br>
+           <img src="images/job3_one.png" alt="job3 one"><br>
+        </div>
+        
+        <button class="collapsible">JOB 4</button>
+        <div class="content">
+           
+           <h4>JOB 4</h4>
+           <p>if app is not working , then send email to developer with error messages.</p><br>
+            <img src="images/job4_one.png" alt="job4 one"><br>
+        </div>
+        
+        <button class="collapsible">JOB 5</button>
+        <div class="content">
+          <h3>Create One extra job job5 for monitor : If container where app is running. fails due to any reson then this job should automatically start the container again.</h3>
+            <img src="images/job5_one.png" alt="job5 one"><br>
+            <img src="images/job5_two.png" alt="job5 two"><br>
+        </div>
+        
+        
+        
+        
+        <script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } 
+  });
+}
+</script>
+    </body>
+</html>
