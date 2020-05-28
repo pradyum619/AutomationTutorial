@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Model training Automation</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="css.css">
+    </head>
+    <body>
+        <button class="collapsible">Introduction</button>
+        <div class="content">
+          <h4>MLOps Tutorial: Automating ML-Model Training using Jenkins, Docker and GitHub.
+            </h4>
+          
+            <p></p>In this Tutorial, we are going to automate our model training to get best accuracy. <br><br>
+
+            <p>Go through the steps </p><br><br>
+        </div>
+        
+        <button class="collapsible">Some Theory</button>
+        <div class="content">
+            
+            <h4>Factors( or I should say parameters)</h4>
+            <br><p>The accuracy depends on many factors such as:</p>
+            <ul>
+              <li>Good quality Dataset</li>
+              <li>Architecture of layers</li>
+              <li>activation func.</li>
+              <li>number of epochs</li>
+              <li>and many more.......</li>
+            </ul>
+            <br><p>Thus we try to make some different combinations of these factors and try each combination one by one to see which would give us best accuracy.</p>
+            <br>
+            <p>THUS, in this example we are going to do similar thing.</p>
+            <br><br>
+            <h4><a href="https://github.com/pradyum619/mlops-mini">CLICK HERE FOR SOURCE CODE</a></h4>
+           <h4>The Source code files structure is as follows</h4><br>
+           <ul>
+             <li>cnn.py -> our main cnn code which will run the training</li>
+             <li>tweak.py -> This will have the list of different combinations as well as the model making function</li>
+             <li>acc.txt -> this text file stores the accuracy of latest build(train)</li>
+             <li>combNum.txt -> this will have an integer (number) which indicates which combination should be tried next.</li>
+             <li>log.txt -> this log text file will have the logs of each run.</li>
+           </ul>
+        </div>
+        
+
+        <button class="collapsible">Setup Environment</button>
+        <div class="content">
+           <h4>We have host as rhel 8 with jenkins installed and docker installed</h4>
+           <p>For running our python code I am using the Docker image created by me
+            <a href="https://hub.docker.com/u/pradyum619">MY PROFILE</a> on Docker Hub (check the image)</p><br>
+            <h4>The jobs in jenkins are as follows</h4>
+           <ol>
+             <li>Pull the github repo and paste code in a directory</li>
+             <li>run the code in docker container using first combination(if this fails a mail is sent)</li>
+             <li>if job 2 is stable,check accuracy and retrain model(by calling job2) or call another job for mail</li>
+             <li>if job3 is stable run job2 again or dont run job2</li>
+           </ol>
+           <h5>I know thats a little confusing but follow the tutorial, you will catch the flow.</h5>
+        </div>
+
+        <button class="collapsible">JOB 1</button>
+        <div class="content">
+           <h4>JOB 1</h4>
+           <p>Pull  the Github repo automatically when some developers push repo to Github.</p><br>
+           <h3>1.</h3>
+           <img src="images/ml_1.png"><br><br>
+           <h3>2.</h3>
+           <img src="images/ml_2.png"><br><br>
+           <h3>3.</h3>
+           <img src="images/ml_3.png"><br><br>
+        </div>
+        
+        <button class="collapsible">JOB 2</button>
+        <div class="content">
+           <h4>JOB 2</h4>
+           <p>Run the code and train model for accuracy by using combination number 1</p><br>
+           <h3>1.</h3>
+           <img src="images/ml_4.png"><br><br>
+           <h3>2.</h3>
+           <img src="images/ml_5.png">
+           <p>HERE IS THE CODE OF EXECUTE SHELL:</p><br>
+           <code>cd /mlcode/</code><br>
+           <code>if (cat cnn.py | grep "Sequential" && cat cnn.py | grep "Dense" && cat cnn.py | grep "Convolution")</code><br>
+           <code>then</code><br>
+           <code>sudo docker run --rm --name my-running-script -v /mlcode:/usr/src/myapp -w /usr/src/myapp pradyum619/mykeras:v2 python cnn.py</code><br>
+           <code>elif (cat cnn.py | grep "Sequential" && cat cnn.py | grep "Dense" )</code><br>
+           <code>then</code><br>
+           <code>echo "module is NN"</code><br>
+           <code>else</code><br>
+           <code>echo "module is Not DeepLearning"</code><br>
+           <code>fi</code><br><br>
+
+           <h3>3.</h3>
+           <img src="images/ml_6.png"><br><br>
+
+        </div>
+        
+        <button class="collapsible">JOB 3</button>
+        <div class="content">
+          <h4>JOB 3</h4>
+           <p>CONFIG AS FOLLOWS:</p><br>
+           <h3>1.</h3>
+           <img src="images/ml_7.png"><br><br>
+           <h3>2.</h3>
+           <img src="images/ml_8.png"><br><br>
+           <h3>3.</h3>
+           <img src="images/ml_9.png"><br><br>
+        </div>
+        
+        <button class="collapsible">JOB 4</button>
+        <div class="content">
+           
+           <h4>JOB 4</h4>
+           <p>CONFIG AS FOLLOWS</p><br>
+            <h3>1.</h3>
+           <img src="images/ml_10.png"><br><br>
+           <h3>2.</h3>
+           <img src="images/ml_11.png"><br><br>
+        </div>
+        
+        <button class="collapsible">WORKFLOW</button>
+        <div class="content">
+          <h3>There are two scenarions:</h3>
+          <h3>SCENE 1</h3>
+          <p>We get the accuracy at any combination and a mail, thus everything is perfect </p>
+          <h3>SCENE 2</h3>
+          <p>We dont get accuracy more than 80% so our code will give index out of bound error when all combinations are carried out aand job2 will be unstable and a mail will be sent to us</p>
+          <h3>After everything we can check the log file to see which combination gave us good accuracy</h3>
+        </div>
+        
+        <script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } 
+  });
+}
+</script>
+    </body>
+</html>
